@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulario Accidentología de Tránsito</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Source+Sans+3:wght@300;400;600&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --negro:#0d0d0d;
+  --rojo:#c0392b;
+  --rojo-claro:#e74c3c;
+  --gris:#f7f5f2;
+  --gris-med:#e8e4df;
+  --gris-osc:#999;
+  --borde:#d5cfc8;
+  --blanco:#fff;
+}
+
+body{
+  font-family:'Source Sans 3',sans-serif;
+  background:var(--gris);
+  color:var(--negro);
+  min-height:100vh;
+  font-weight:300;
+}
+
+/* HEADER */
+.header{
+  background:var(--negro);
+  color:var(--blanco);
+  padding:2.5rem 2rem 2rem;
+  text-align:center;
+  border-bottom:4px solid var(--rojo);
+}
+.header h1{
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;
+  letter-spacing:.02em;
+  margin-bottom:.8rem;
+  line-height:1.3;
+}
+.header .aviso{
+  background:var(--rojo);
+  color:#fff;
+  font-size:.82rem;
+  font-weight:600;
+  letter-spacing:.04em;
+  padding:.6rem 1.2rem;
+  border-radius:3px;
+  display:inline-block;
+  margin-top:.5rem;
+  line-height:1.5;
+  max-width:600px;
+}
+
+/* PROGRESS */
+.progress-wrap{
+  background:var(--negro);
+  padding:.5rem 2rem .8rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+}
+.progress-bar{
+  flex:1;
+  height:4px;
+  background:#333;
+  border-radius:2px;
+  overflow:hidden;
+}
+.progress-fill{
+  height:100%;
+  background:var(--rojo);
+  border-radius:2px;
+  transition:width .4s ease;
+  width:0%;
+}
+.progress-txt{
+  font-family:monospace;
+  font-size:.65rem;
+  color:#888;
+  white-space:nowrap;
+}
+
+/* MAIN */
+.main{
+  max-width:720px;
+  margin:0 auto;
+  padding:2rem 1.2rem 4rem;
+}
+
+/* SECCIONES */
+.seccion{
+  background:var(--blanco);
+  border:1px solid var(--borde);
+  border-radius:6px;
+  margin-bottom:1.5rem;
+  overflow:hidden;
+}
+.sec-header{
+  background:var(--negro);
+  color:var(--blanco);
+  padding:.7rem 1.2rem;
+  display:flex;
+  align-items:center;
+  gap:.7rem;
+}
+.sec-num{
+  background:var(--rojo);
+  color:#fff;
+  width:24px;
+  height:24px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:monospace;
+  font-size:.75rem;
+  font-weight:700;
+  flex-shrink:0;
+}
+.sec-tit{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;
+  letter-spacing:.02em;
+}
+.sec-body{
+  padding:1.2rem;
+}
+
+/* CAMPOS */
+.campo{
+  margin-bottom:1rem;
+}
+.campo:last-child{margin-bottom:0}
+.campo label{
+  display:block;
+  font-size:.75rem;
+  font-weight:600;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#666;
+  margin-bottom:.35rem;
+}
+.campo label .req{color:var(--rojo);margin-left:2px}
+.campo input[type=text],
+.campo input[type=email],
+.campo input[type=tel],
+.campo input[type=date],
+.campo textarea,
+.campo select{
+  width:100%;
+  border:1.5px solid var(--borde);
+  border-radius:4px;
+  padding:.55rem .8rem;
+  font-family:'Source Sans 3',sans-serif;
+  font-size:.9rem;
+  color:var(--negro);
+  background:#fff;
+  transition:border-color .2s;
+  font-weight:300;
+}
+.campo input:focus,
+.campo textarea:focus,
+.campo select:focus{
+  outline:none;
+  border-color:var(--rojo);
+}
+.campo textarea{
+  resize:vertical;
+  min-height:80px;
+  line-height:1.6;
+}
+.campo .ayuda{
+  font-size:.72rem;
+  color:var(--gris-osc);
+  margin-top:.25rem;
+  line-height:1.5;
+}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+@media(max-width:500px){.grid2{grid-template-columns:1fr}}
+
+/* CHECKBOXES DOCUMENTOS */
+.doc-lista{
+  display:grid;
+  gap:.3rem;
+  margin-top:.4rem;
+}
+.doc-item{
+  display:flex;
+  align-items:flex-start;
+  gap:.6rem;
+  padding:.45rem .6rem;
+  border:1.5px solid var(--gris-med);
+  border-radius:4px;
+  cursor:pointer;
+  transition:all .15s;
+  background:#fafaf9;
+}
+.doc-item:hover{border-color:var(--rojo);background:#fff5f5}
+.doc-item input[type=checkbox]{
+  width:16px;height:16px;
+  accent-color:var(--rojo);
+  margin-top:2px;
+  flex-shrink:0;
+  cursor:pointer;
+}
+.doc-item span{
+  font-size:.83rem;
+  line-height:1.4;
+  color:var(--negro);
+}
+.doc-item.chequeado{
+  border-color:var(--rojo);
+  background:#fff8f8;
+}
+.doc-item.chequeado span{font-weight:600;color:var(--rojo)}
+
+/* RADIO */
+.radio-grupo{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:.3rem}
+.radio-item{
+  display:flex;align-items:center;gap:.35rem;
+  padding:.35rem .7rem;
+  border:1.5px solid var(--borde);
+  border-radius:4px;cursor:pointer;
+  font-size:.83rem;transition:all .15s;
+  background:#fafaf9;
+}
+.radio-item:hover{border-color:var(--rojo)}
+.radio-item input{accent-color:var(--rojo);cursor:pointer}
+.radio-item.sel{border-color:var(--rojo);background:#fff5f5;font-weight:600}
+
+/* ADJUNTOS */
+.adjunto-zona{
+  border:2px dashed var(--borde);
+  border-radius:5px;
+  padding:1rem;
+  text-align:center;
+  font-size:.8rem;
+  color:var(--gris-osc);
+  margin-top:.5rem;
+  background:#fafaf9;
+  cursor:pointer;
+  transition:all .2s;
+  position:relative;
+}
+.adjunto-zona:hover{border-color:var(--rojo);background:#fff5f5;color:var(--rojo)}
+.adjunto-zona input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.adjunto-lista{margin-top:.4rem;font-size:.75rem;color:#444;text-align:left}
+.adjunto-lista div{padding:.2rem 0;border-bottom:1px solid var(--gris-med)}
+
+/* BOTON ENVIAR */
+.enviar-wrap{
+  text-align:center;
+  margin-top:2rem;
+}
+.btn-enviar{
+  background:var(--rojo);
+  color:#fff;
+  border:none;
+  border-bottom:3px solid #922b21;
+  padding:1rem 3rem;
+  font-family:'Playfair Display',serif;
+  font-size:1.1rem;
+  letter-spacing:.05em;
+  border-radius:5px;
+  cursor:pointer;
+  transition:opacity .2s;
+  width:100%;
+  max-width:400px;
+}
+.btn-enviar:hover{opacity:.88}
+.btn-enviar:disabled{opacity:.5;cursor:not-allowed}
+.aviso-envio{
+  margin-top:1rem;
+  font-size:.78rem;
+  color:#888;
+  line-height:1.6;
+}
+.aviso-envio strong{color:var(--rojo)}
+
+/* MENSAJE EXITO */
+.exito{
+  display:none;
+  background:#fff;
+  border:2px solid var(--rojo);
+  border-radius:8px;
+  padding:2rem;
+  text-align:center;
+  margin-top:1.5rem;
+}
+.exito h2{font-family:'Playfair Display',serif;color:var(--rojo);margin-bottom:.8rem}
+.exito p{font-size:.9rem;line-height:1.8;color:#444}
+
+/* ERROR */
+.campo.error input,
+.campo.error textarea,
+.campo.error select{border-color:var(--rojo-claro)}
+.campo .err-msg{font-size:.72rem;color:var(--rojo-claro);margin-top:.2rem;display:none}
+.campo.error .err-msg{display:block}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Formulario Accidentología de Tránsito</h1>
+  <div class="aviso">
+    Luego de enviar el formulario no olvide enviar la documental tildada como reunida.<br>
+    Sin la documental no podrá ser citado a verificación y firma de Inicio del Reclamo ante la Aseguradora.
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-txt" id="progressTxt">0%</div>
+</div>
+
+<div class="main">
+<form id="form" novalidate>
+
+<!-- SECCIÓN 1 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">1</div><div class="sec-tit">Datos Personales</div></div>
+  <div class="sec-body">
+    <div class="grid2">
+      <div class="campo">
+        <label>Nombre y Apellido<span class="req">*</span></label>
+        <input type="text" id="nombre" placeholder="APELLIDO Nombre" required>
+        <div class="err-msg">Campo obligatorio</div>
+      </div>
+      <div class="campo">
+        <label>DNI<span class="req">*</span></label>
+        <input type="text" id="dni" placeholder="XX.XXX.XXX" required>
+        <div class="err-msg">Campo obligatorio</div>
+      </div>
+    </div>
+    <div class="campo">
+      <label>Domicilio real<span class="req">*</span></label>
+      <input type="text" id="domicilio" placeholder="Calle, número, localidad, provincia" required>
+      <div class="err-msg">Campo obligatorio</div>
+    </div>
+    <div class="grid2">
+      <div class="campo">
+        <label>Teléfono celular<span class="req">*</span></label>
+        <input type="tel" id="celular" placeholder="11-XXXX-XXXX" required>
+        <div class="err-msg">Campo obligatorio</div>
+      </div>
+      <div class="campo">
+        <label>Teléfono alternativo</label>
+        <input type="tel" id="tel_alt" placeholder="Opcional">
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="campo">
+        <label>Correo electrónico<span class="req">*</span></label>
+        <input type="email" id="email" placeholder="ejemplo@gmail.com" required>
+        <div class="err-msg">Campo obligatorio</div>
+      </div>
+      <div class="campo">
+        <label>Profesión / Actividad laboral</label>
+        <input type="text" id="profesion" placeholder="Empleado, comerciante, etc.">
+      </div>
+    </div>
+    <div class="campo">
+      <label>Documentos personales disponibles</label>
+      <div class="doc-lista" id="docs_pers">
+        <label class="doc-item"><input type="checkbox" value="Copia DNI (frente y dorso)"><span>Copia del DNI (frente y dorso)</span></label>
+        <label class="doc-item"><input type="checkbox" value="Recibos de sueldo o constancia de ingresos"><span>Recibos de sueldo o constancia de ingresos</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 2 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">2</div><div class="sec-tit">Datos del Accidente</div></div>
+  <div class="sec-body">
+    <div class="grid2">
+      <div class="campo">
+        <label>Fecha del accidente<span class="req">*</span></label>
+        <input type="date" id="fecha_acc" required>
+        <div class="err-msg">Campo obligatorio</div>
+      </div>
+      <div class="campo">
+        <label>Hora aproximada</label>
+        <input type="text" id="hora_acc" placeholder="Ej: 14:30">
+      </div>
+    </div>
+    <div class="campo">
+      <label>Lugar del accidente<span class="req">*</span></label>
+      <input type="text" id="lugar_acc" placeholder="Calle, intersección, localidad" required>
+      <div class="err-msg">Campo obligatorio</div>
+    </div>
+    <div class="campo">
+      <label>Relato del accidente<span class="req">*</span></label>
+      <textarea id="relato" rows="4" placeholder="Describa cómo ocurrió: sentido de circulación de los vehículos, condiciones climáticas, existencia de semáforos o señalización, etc." required></textarea>
+      <div class="err-msg">Campo obligatorio</div>
+    </div>
+    <div class="campo">
+      <label>Otros datos de interés</label>
+      <textarea id="otros_datos" rows="2" placeholder="Cualquier otro dato relevante"></textarea>
+    </div>
+    <div class="campo">
+      <label>Documentos del accidente disponibles</label>
+      <div class="doc-lista">
+        <label class="doc-item"><input type="checkbox" value="Fotografías del lugar del hecho"><span>Fotografías del lugar del hecho</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 3 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">3</div><div class="sec-tit">Vehículo del Cliente</div></div>
+  <div class="sec-body">
+    <div class="grid2">
+      <div class="campo">
+        <label>Marca, modelo y dominio (patente)</label>
+        <input type="text" id="veh_marca" placeholder="Ej: Toyota Corolla ABC123">
+      </div>
+      <div class="campo">
+        <label>Titular registral</label>
+        <input type="text" id="veh_titular" placeholder="Nombre del titular">
+      </div>
+    </div>
+    <div class="campo">
+      <label>Documentos de su vehículo disponibles</label>
+      <div class="doc-lista">
+        <label class="doc-item"><input type="checkbox" value="Cédula verde o azul"><span>Cédula verde o azul</span></label>
+        <label class="doc-item"><input type="checkbox" value="Licencia de conducir vigente"><span>Licencia de conducir vigente</span></label>
+        <label class="doc-item"><input type="checkbox" value="VTV (Verificación Técnica Vehicular)"><span>VTV (Verificación Técnica Vehicular)</span></label>
+        <label class="doc-item"><input type="checkbox" value="Póliza de seguro"><span>Póliza de seguro</span></label>
+        <label class="doc-item"><input type="checkbox" value="Denuncia de siniestro ante la aseguradora"><span>Denuncia de siniestro ante la aseguradora</span></label>
+        <label class="doc-item"><input type="checkbox" value="Fotografías de los daños del vehículo"><span>Fotografías de los daños del vehículo</span></label>
+        <label class="doc-item"><input type="checkbox" value="Presupuesto de reparación"><span>Presupuesto de reparación</span></label>
+        <label class="doc-item"><input type="checkbox" value="Facturas de reparación"><span>Facturas de reparación</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 4 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">4</div><div class="sec-tit">Vehículo y Conductor Contrario</div></div>
+  <div class="sec-body">
+    <div class="campo">
+      <label>Marca, modelo y dominio (patente) del vehículo contrario</label>
+      <input type="text" id="veh_c_marca" placeholder="Ej: Ford Focus XYZ456">
+    </div>
+    <div class="campo">
+      <label>Nombre, apellido y domicilio del conductor contrario</label>
+      <input type="text" id="veh_c_conductor" placeholder="Nombre completo y domicilio">
+    </div>
+    <div class="campo">
+      <label>Titular registral del vehículo contrario (si difiere del conductor)</label>
+      <input type="text" id="veh_c_titular" placeholder="Nombre del titular registral">
+    </div>
+    <div class="campo">
+      <label>Compañía aseguradora del vehículo contrario y número de póliza</label>
+      <input type="text" id="veh_c_seguro" placeholder="Ej: La Caja Seguros - Póliza Nº XXXXX">
+    </div>
+    <div class="campo">
+      <label>Documentos del vehículo contrario disponibles</label>
+      <div class="doc-lista">
+        <label class="doc-item"><input type="checkbox" value="Fotografías del vehículo contrario"><span>Fotografías del vehículo contrario</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 5 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">5</div><div class="sec-tit">Documentación Policial y Administrativa</div></div>
+  <div class="sec-body">
+    <div class="campo">
+      <label>¿Realizó denuncia policial?</label>
+      <div class="radio-grupo">
+        <label class="radio-item"><input type="radio" name="denuncia_pol" value="Sí"> Sí</label>
+        <label class="radio-item"><input type="radio" name="denuncia_pol" value="No"> No</label>
+        <label class="radio-item"><input type="radio" name="denuncia_pol" value="No recuerdo"> No recuerdo</label>
+      </div>
+    </div>
+    <div class="campo">
+      <label>¿Hay actuaciones penales?</label>
+      <div class="radio-grupo">
+        <label class="radio-item"><input type="radio" name="actuaciones_pen" value="Sí"> Sí</label>
+        <label class="radio-item"><input type="radio" name="actuaciones_pen" value="No"> No</label>
+        <label class="radio-item"><input type="radio" name="actuaciones_pen" value="No sé"> No sé</label>
+      </div>
+    </div>
+    <div class="campo">
+      <label>Número de causa penal, Fiscalía o Juzgado interviniente</label>
+      <input type="text" id="causa_penal" placeholder="Si lo conoce, indíquelo aquí">
+    </div>
+    <div class="campo">
+      <label>Documentos policiales disponibles</label>
+      <div class="doc-lista">
+        <label class="doc-item"><input type="checkbox" value="Acta policial"><span>Acta policial</span></label>
+        <label class="doc-item"><input type="checkbox" value="Denuncia policial"><span>Denuncia policial</span></label>
+        <label class="doc-item"><input type="checkbox" value="Sumario policial"><span>Sumario policial</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 6 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">6</div><div class="sec-tit">Lesiones y Documentación Médica</div></div>
+  <div class="sec-body">
+    <div class="campo">
+      <label>Describa las lesiones sufridas<span class="req">*</span></label>
+      <textarea id="lesiones" rows="4" placeholder="Qué parte del cuerpo, síntomas, dolor, limitaciones, tratamiento recibido, etc." required></textarea>
+      <div class="err-msg">Campo obligatorio</div>
+    </div>
+    <div class="campo">
+      <label>Documentación médica disponible</label>
+      <div class="doc-lista">
+        <label class="doc-item"><input type="checkbox" value="Certificado médico inicial"><span>Certificado médico inicial</span></label>
+        <label class="doc-item"><input type="checkbox" value="Historia clínica"><span>Historia clínica</span></label>
+        <label class="doc-item"><input type="checkbox" value="Radiografías (RX)"><span>Radiografías (RX)</span></label>
+        <label class="doc-item"><input type="checkbox" value="Resonancia Magnética (RMN)"><span>Resonancia Magnética (RMN)</span></label>
+        <label class="doc-item"><input type="checkbox" value="Tomografía (TAC)"><span>Tomografía (TAC)</span></label>
+        <label class="doc-item"><input type="checkbox" value="Otros estudios médicos (ecografías, etc.)"><span>Otros estudios médicos (ecografías, etc.)</span></label>
+        <label class="doc-item"><input type="checkbox" value="Recetas médicas"><span>Recetas médicas</span></label>
+        <label class="doc-item"><input type="checkbox" value="Constancias de rehabilitación o kinesiología"><span>Constancias de rehabilitación o kinesiología</span></label>
+        <label class="doc-item"><input type="checkbox" value="Certificados de incapacidad"><span>Certificados de incapacidad</span></label>
+        <label class="doc-item"><input type="checkbox" value="Fotografías de las lesiones"><span>Fotografías de las lesiones</span></label>
+        <label class="doc-item"><input type="checkbox" value="Facturas y tickets de gastos médicos y farmacéuticos"><span>Facturas y tickets de gastos médicos y farmacéuticos</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 7 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">7</div><div class="sec-tit">Lucro Cesante y Pérdida de Chance</div></div>
+  <div class="sec-body">
+    <div class="campo">
+      <label>¿Dejó de trabajar a raíz del accidente?</label>
+      <div class="radio-grupo">
+        <label class="radio-item"><input type="radio" name="dejo_trabajar" value="Sí"> Sí</label>
+        <label class="radio-item"><input type="radio" name="dejo_trabajar" value="No"> No</label>
+        <label class="radio-item"><input type="radio" name="dejo_trabajar" value="Parcialmente"> Parcialmente</label>
+      </div>
+    </div>
+    <div class="campo">
+      <label>¿Cuántos días no trabajó? ¿Tomó licencias médicas?</label>
+      <input type="text" id="dias_no_trab" placeholder="Ej: 15 días, tomé licencia médica">
+    </div>
+    <div class="campo">
+      <label>¿Dejó de percibir alguna ganancia o se frustró alguna oportunidad laboral?</label>
+      <textarea id="lucro" rows="3" placeholder="Contratos perdidos, clientes, ascensos u otras oportunidades económicas"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 8 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">8</div><div class="sec-tit">Gastos</div></div>
+  <div class="sec-body">
+    <div class="campo">
+      <label>Detalle los gastos realizados</label>
+      <textarea id="gastos" rows="3" placeholder="Transporte, medicación, asistencia de terceros, traslados médicos, etc."></textarea>
+    </div>
+    <div class="campo">
+      <label>Comprobantes de gastos disponibles</label>
+      <div class="doc-lista">
+        <label class="doc-item"><input type="checkbox" value="Facturas de gastos"><span>Facturas de gastos</span></label>
+        <label class="doc-item"><input type="checkbox" value="Tickets de gastos"><span>Tickets de gastos</span></label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SECCIÓN 9 -->
+<div class="seccion">
+  <div class="sec-header"><div class="sec-num">9</div><div class="sec-tit">Testigos</div></div>
+  <div class="sec-body">
+    <p style="font-size:.8rem;color:#666;margin-bottom:1rem;line-height:1.6">Necesitamos al menos 3 testigos. No es necesario que hayan presenciado el accidente — pueden ser personas que puedan dar testimonio sobre el perjuicio físico, psicológico y económico sufrido (médicos, familiares, compañeros de trabajo, amigos, etc.).</p>
+    <div class="campo">
+      <label>Testigo 1 – Nombre completo, DNI, domicilio y teléfono</label>
+      <textarea id="testigo1" rows="2" placeholder="Nombre, DNI, domicilio y teléfono de contacto"></textarea>
+    </div>
+    <div class="campo">
+      <label>Testigo 2 – Nombre completo, DNI, domicilio y teléfono</label>
+      <textarea id="testigo2" rows="2" placeholder="Nombre, DNI, domicilio y teléfono de contacto"></textarea>
+    </div>
+    <div class="campo">
+      <label>Testigo 3 – Nombre completo, DNI, domicilio y teléfono</label>
+      <textarea id="testigo3" rows="2" placeholder="Nombre, DNI, domicilio y teléfono de contacto"></textarea>
+    </div>
+    <div class="campo">
+      <label>Testigos adicionales</label>
+      <textarea id="testigos_mas" rows="2" placeholder="Si tiene más de 3 testigos, indíquelos aquí"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ENVIAR -->
+<div class="enviar-wrap">
+  <button type="button" class="btn-enviar" id="btnEnviar" onclick="enviarFormulario()">
+    Enviar formulario
+  </button>
+  <div class="aviso-envio">
+    Al hacer clic se abrirá su cliente de email (Gmail, Outlook, etc.) con todos los datos completados.<br>
+    <strong>Antes de enviar el email, adjunte la documentación tildada.</strong>
+  </div>
+</div>
+
+<div class="exito" id="exito">
+  <h2>✓ Formulario preparado</h2>
+  <p>
+    Su cliente de email se abrió con todos los datos.<br><br>
+    <strong>No olvide adjuntar la documentación tildada antes de enviar.</strong><br><br>
+    Sin la documental no podrá ser citado a verificación y firma<br>
+    de Inicio del Reclamo ante la Aseguradora.
+  </p>
+</div>
+
+</form>
+</div>
+
+<script>
+var EMAIL = 'transitoehp@gmail.com';
+
+// Progress bar
+function actualizarProgreso(){
+  var requeridos = document.querySelectorAll('[required]');
+  var completados = 0;
+  requeridos.forEach(function(el){
+    if(el.value && el.value.trim()) completados++;
+  });
+  var pct = Math.round((completados/requeridos.length)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressTxt').textContent = pct+'%';
+}
+
+// Checkbox visual
+document.querySelectorAll('.doc-item input[type=checkbox]').forEach(function(cb){
+  cb.addEventListener('change', function(){
+    var item = this.closest('.doc-item');
+    item.classList.toggle('chequeado', this.checked);
+    actualizarProgreso();
+  });
+});
+
+// Radio visual
+document.querySelectorAll('.radio-item input[type=radio]').forEach(function(r){
+  r.addEventListener('change', function(){
+    var grupo = this.closest('.radio-grupo');
+    grupo.querySelectorAll('.radio-item').forEach(function(ri){ri.classList.remove('sel')});
+    this.closest('.radio-item').classList.add('sel');
+    actualizarProgreso();
+  });
+});
+
+// Input progress
+document.querySelectorAll('input,textarea').forEach(function(el){
+  el.addEventListener('input', actualizarProgreso);
+});
+
+// Recolectar checkboxes tildados
+function getChecked(contenedor){
+  var arr = [];
+  contenedor.querySelectorAll('input[type=checkbox]:checked').forEach(function(cb){
+    arr.push('✅ '+cb.value);
+  });
+  if(!arr.length) arr.push('Ninguno');
+  return arr.join('\n    ');
+}
+
+// Recolectar radio
+function getRadio(name){
+  var el = document.querySelector('input[name="'+name+'"]:checked');
+  return el ? el.value : 'No respondido';
+}
+
+// Validar
+function validar(){
+  var ok = true;
+  document.querySelectorAll('.campo').forEach(function(c){c.classList.remove('error')});
+  document.querySelectorAll('[required]').forEach(function(el){
+    if(!el.value||!el.value.trim()){
+      el.closest('.campo').classList.add('error');
+      ok = false;
+    }
+  });
+  if(!ok) document.querySelector('.campo.error').scrollIntoView({behavior:'smooth',block:'center'});
+  return ok;
+}
+
+// Armar y enviar
+function enviarFormulario(){
+  if(!validar()) return;
+
+  var nombre = document.getElementById('nombre').value.trim();
+  var asunto = encodeURIComponent('Documentación Accidente de Tránsito – ' + nombre);
+
+  var cuerpo =
+'FORMULARIO ACCIDENTOLOGÍA DE TRÁNSITO\n' +
+'========================================\n\n' +
+'1. DATOS PERSONALES\n' +
+'----------------------------------------\n' +
+'Nombre y Apellido: ' + nombre + '\n' +
+'DNI: ' + document.getElementById('dni').value + '\n' +
+'Domicilio real: ' + document.getElementById('domicilio').value + '\n' +
+'Teléfono celular: ' + document.getElementById('celular').value + '\n' +
+'Teléfono alternativo: ' + (document.getElementById('tel_alt').value||'No indicado') + '\n' +
+'Email: ' + document.getElementById('email').value + '\n' +
+'Profesión: ' + (document.getElementById('profesion').value||'No indicado') + '\n' +
+'Documentos personales disponibles:\n    ' + getChecked(document.querySelector('#docs_pers')) + '\n\n' +
+
+'2. DATOS DEL ACCIDENTE\n' +
+'----------------------------------------\n' +
+'Fecha: ' + document.getElementById('fecha_acc').value + '\n' +
+'Hora: ' + (document.getElementById('hora_acc').value||'No indicado') + '\n' +
+'Lugar: ' + document.getElementById('lugar_acc').value + '\n' +
+'Relato: ' + document.getElementById('relato').value + '\n' +
+'Otros datos: ' + (document.getElementById('otros_datos').value||'Ninguno') + '\n' +
+'Documentos disponibles:\n    ' + getChecked(document.querySelectorAll('.seccion')[1]) + '\n\n' +
+
+'3. VEHÍCULO DEL CLIENTE\n' +
+'----------------------------------------\n' +
+'Marca, modelo y patente: ' + (document.getElementById('veh_marca').value||'No indicado') + '\n' +
+'Titular registral: ' + (document.getElementById('veh_titular').value||'No indicado') + '\n' +
+'Documentos disponibles:\n    ' + getChecked(document.querySelectorAll('.seccion')[2]) + '\n\n' +
+
+'4. VEHÍCULO Y CONDUCTOR CONTRARIO\n' +
+'----------------------------------------\n' +
+'Marca, modelo y patente: ' + (document.getElementById('veh_c_marca').value||'No indicado') + '\n' +
+'Conductor contrario: ' + (document.getElementById('veh_c_conductor').value||'No indicado') + '\n' +
+'Titular registral: ' + (document.getElementById('veh_c_titular').value||'No indicado') + '\n' +
+'Aseguradora y póliza: ' + (document.getElementById('veh_c_seguro').value||'No indicado') + '\n' +
+'Documentos disponibles:\n    ' + getChecked(document.querySelectorAll('.seccion')[3]) + '\n\n' +
+
+'5. DOCUMENTACIÓN POLICIAL\n' +
+'----------------------------------------\n' +
+'Denuncia policial: ' + getRadio('denuncia_pol') + '\n' +
+'Actuaciones penales: ' + getRadio('actuaciones_pen') + '\n' +
+'Causa penal: ' + (document.getElementById('causa_penal').value||'No indicado') + '\n' +
+'Documentos disponibles:\n    ' + getChecked(document.querySelectorAll('.seccion')[4]) + '\n\n' +
+
+'6. LESIONES Y DOCUMENTACIÓN MÉDICA\n' +
+'----------------------------------------\n' +
+'Lesiones: ' + document.getElementById('lesiones').value + '\n' +
+'Documentación médica disponible:\n    ' + getChecked(document.querySelectorAll('.seccion')[5]) + '\n\n' +
+
+'7. LUCRO CESANTE\n' +
+'----------------------------------------\n' +
+'Dejó de trabajar: ' + getRadio('dejo_trabajar') + '\n' +
+'Días no trabajados: ' + (document.getElementById('dias_no_trab').value||'No indicado') + '\n' +
+'Pérdida de chance: ' + (document.getElementById('lucro').value||'No indicado') + '\n\n' +
+
+'8. GASTOS\n' +
+'----------------------------------------\n' +
+'Detalle: ' + (document.getElementById('gastos').value||'No indicado') + '\n' +
+'Comprobantes:\n    ' + getChecked(document.querySelectorAll('.seccion')[7]) + '\n\n' +
+
+'9. TESTIGOS\n' +
+'----------------------------------------\n' +
+'Testigo 1: ' + (document.getElementById('testigo1').value||'No indicado') + '\n' +
+'Testigo 2: ' + (document.getElementById('testigo2').value||'No indicado') + '\n' +
+'Testigo 3: ' + (document.getElementById('testigo3').value||'No indicado') + '\n' +
+'Testigos adicionales: ' + (document.getElementById('testigos_mas').value||'Ninguno') + '\n\n' +
+
+'========================================\n' +
+'RECORDATORIO: Adjuntar toda la documentación tildada.\n' +
+'Sin documental no puede ser citado a verificación.\n' +
+'========================================';
+
+  var mailto = 'mailto:'+EMAIL+'?subject='+asunto+'&body='+encodeURIComponent(cuerpo);
+  window.location.href = mailto;
+
+  document.getElementById('exito').style.display = 'block';
+  document.getElementById('exito').scrollIntoView({behavior:'smooth'});
+}
+
+// Init
+actualizarProgreso();
+</script>
+</body>
+</html>
